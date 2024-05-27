@@ -33,6 +33,13 @@ export default {
       correct_answer: undefined
     }
   },
+  computed: {
+    answers() {
+      let answers = [...this.incorrect_answers];
+      answers.push(this.correct_answer);
+      return answers;
+    }
+  },
   created() {
     this.axios.get("https://opentdb.com/api.php?amount=10&category=15").then((response) => {
       this.question = response.data.results[0].question;
