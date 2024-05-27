@@ -1,23 +1,16 @@
 <template>
 
-<div class="question">
-  <h2 v-html="this.question"></h2>
-</div>
-<div class="answer">
-  <input type="radio" name="response" value="Peach">
-  <label for="">Peach</label><br>
+  <template v-if="this.question">
+    <div class="question">
+      <h2 v-html="this.question"></h2>
+    </div>
+    <div v-for="answer in answers" class="answer" :key="answer">
+      <input type="radio" name="response" value="answer">
+      <label v-html="answer"></label><br>
+    </div>
+  </template>
 
-  <input type="radio" name="response" value="Bowser">
-  <label for="">Bowser</label><br>
-
-  <input type="radio" name="response" value="Mewtwo">
-  <label for="">Mewtwo</label><br>
-
-  <input type="radio" name="response" value="King Dedede">
-  <label for="">King Dedede</label>
-</div>
-
-<input type="button" class="btn" value="Responder">
+  <input type="button" class="btn" value="Responder">
 
 </template>
 
@@ -36,7 +29,7 @@ export default {
   computed: {
     answers() {
       let answers = [...this.incorrect_answers];
-      answers.push(this.correct_answer);
+      answers.splice(Math.round(Math.random() * answers.length), 0, this.correct_answer);
       return answers;
     }
   },
