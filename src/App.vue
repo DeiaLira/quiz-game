@@ -1,7 +1,7 @@
 <template>
 
 <div class="question">
-  <h2>Which of these characters was NOT planned to be playable for Super Smash Bros. 64?</h2>
+  <h2 v-html="this.question"></h2>
 </div>
 <div class="answer">
   <input type="radio" name="response" value="Peach">
@@ -25,6 +25,21 @@
 
 export default {
   name: 'App',
+
+  data() {
+    return {
+      question: undefined,
+      incorrect_answers: undefined,
+      correct_answer: undefined
+    }
+  },
+  created() {
+    this.axios.get("https://opentdb.com/api.php?amount=10&category=15").then((response) => {
+      this.question = response.data.results[0].question;
+      this.incorrect_answers = response.data.results[0].incorrect_answers;
+      this.correct_answer = response.data.results[0].correct_answer;
+    })
+  }
 }
 
 </script>
