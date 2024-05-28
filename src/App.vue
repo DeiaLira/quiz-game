@@ -1,5 +1,7 @@
 <template>
 
+  <scoreBoard :winCount="this.winCount" :loseCount="this.loseCount"/>
+
   <template v-if="this.question">
     <div class="question">
       <h2 v-html="this.question"></h2>
@@ -12,21 +14,25 @@
   </template>
 
   <section v-if="this.answer_submitted" class="resultados">
-    <h4 v-if="this.chosen_answer == this.correct_answer">
-      &#9989; Congratulations! You're right. "{{ this.correct_answer }}" is correct.
-    </h4>
-    <h4 v-else>
-      &#10060; Sorry, wrong answer. The correct answer is "{{ this.correct_answer }}".
-    </h4>
-    <input type="button" class="btn" value="Next Question">
+    <h4 v-if="this.chosen_answer == this.correct_answer" 
+    v-html="'&#9989; Congratulations! You are right. ' + this.correct_answer + ' is correct.'"></h4>
+    <h4 v-else 
+    v-html="'&#10060; Sorry, wrong answer. The correct answer is ' + this.correct_answer + '.'">
+      </h4>
+    <input @click="this.nextQuestion();" type="button" class="btn" value="Next Question">
   </section>
 
 </template>
 
 <script>
 
+import scoreBoard from "./components/scoreBoard.vue";
+
 export default {
   name: 'App',
+  components: {
+    scoreBoard
+  },
 
   data() {
     return {
@@ -34,7 +40,9 @@ export default {
       incorrect_answers: undefined,
       correct_answer: undefined,
       chosen_answer: undefined,
-      answer_submitted: false
+      answer_submitted: false,
+      winCount: 0,
+      loseCount: 0
     }
   },
 
@@ -52,20 +60,29 @@ export default {
         alert("Pick one of the options");
       }else if(this.chosen_answer == this.correct_answer) {
         this.answer_submitted = true;
-        console.log("Congratulations! You're right.");
+        this.winCount++;
       }else {
         this.answer_submitted = true;
-        console.log("Sorry! Try again.");
+        this.loseCount++;
       }
-    }
-  },
+    },
 
-  created() {
-    this.axios.get("https://opentdb.com/api.php?amount=10&category=15").then((response) => {
+    nextQuestion() {
+
+      this.answer_submitted = false;
+      this.chosen_answer = undefined;
+      this.question = undefined;
+
+      this.axios.get("https://opentdb.com/api.php?amount=10&category=15").then((response) => {
       this.question = response.data.results[0].question;
       this.incorrect_answers = response.data.results[0].incorrect_answers;
       this.correct_answer = response.data.results[0].correct_answer;
     })
+    }
+  },
+
+  created() {
+    this.nextQuestion();
   }
 }
 
@@ -94,5 +111,8 @@ export default {
   background-color: #4169E1
   color: #ffffff
   border-radius: 10px
+
+.resultados
+  margin-top: 5%
 
 </style>
