@@ -1,4 +1,4 @@
-# quiz_game
+# quiz_cine
 
 ## Project setup
 ```
