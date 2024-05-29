@@ -48,6 +48,7 @@ export default {
       winCount: 0,
       loseCount: 0
     }
+    
   },
 
   computed: {
@@ -70,6 +71,9 @@ export default {
         this.loseCount++;
       }
 
+      localStorage.setItem("winCount", (this.winCount));
+      localStorage.setItem("loseCount", (this.loseCount));
+
     },
 
     nextQuestion() {
@@ -88,8 +92,17 @@ export default {
 
   created() {
     this.nextQuestion();
-  }
-}
+    this.winCount = localStorage.getItem("winCount") ? (localStorage.getItem("winCount")) : this.winCount;
+    this.loseCount = localStorage.getItem("loseCount") ? (localStorage.getItem("loseCount")) : this.loseCount;
+    },
+    updated() { 
+        localStorage.setItem("winCount", (this.winCount));
+        localStorage.setItem("loseCount", (this.loseCount));
+    } //Também podemos transformar em um método, e vinculá-lo aos botões add e clear.
+
+};
+  
+
 </script>
 
 <style lang="sass">
